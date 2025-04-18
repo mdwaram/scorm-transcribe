@@ -1,67 +1,42 @@
 <html>
-<title>
-  SCORM Package Transcript Extraction
-</title>
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/jszip/dist/jszip.min.js"></script>
+  <title>
+    SCORM Package Transcript Extraction POC
+  </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="static/main.css" />
+</head>
 </head>
 <body>
-  <table width="50%" align="center">
+  <br />
+  <table width="70%" align="center">
+    <tr>
+      <td align="center">
+        <h4>SCORM Package Transcript Extraction POC</h4>
+      </td>
+    </tr>
     <tr>
       <td>
-        <div>
-          Select Scorm Package (.zip file): <input type="file" id="scorm-file" accept="zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed">
+        <div class="form alert alert-primary">
+          <form name="scormFileUpload" method="post" action="/index" enctype="multipart/form-data">
+            <div>Select Scorm Package (.zip file):</div>
+            <div><input class="form-control" type="file" name="scormFile" accept="zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed" /></div>
+            <div><input type="submit" class="btn btn-primary" value="Upload" /></div>
+          </form>
         </div>
-        <div id="main-div">
+        {% if error_message != "" %}
+          <div class="error-message">
+            ERROR: {{ error_message }}
+          </div>
+        {% endif %}
+
+        <div>
+          asdf
         </div>
       </td>
     </tr>
   </table>
-
-  <script language="JavaScript" type="text/javascript">
-    mainDiv = document.getElementById("main-div");
-
-    function loadXMLDoc(dname) {
-        if (window.XMLHttpRequest) {
-          xhttp = new XMLHttpRequest();
-        }
-        else {
-          xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xhttp.open("GET",dname,false);
-        xhttp.send();
-        return xhttp.responseXML;
-    } 
-    
-    function searchXML(manifestString) {
-      const parser = new DOMParser();
-      var manifestXML = parser.parseFromString(manifestString, "text/xml");
-      console.log(manifestString);
-      fileNodes = manifestXML.getElementsByTagName("file");
-      for (i=0; i<fileNodes.length; i++) {
-        fileNodeHref = fileNodes[i].getAttribute("href");
-        // || /story_content\/external_files.*.pdf/i.test(fileNodeHref)
-        if (/story_content.*.mp3/i.test(fileNodeHref)) {
-          var div = document.createElement("div");
-          div.innerHTML = fileNodeHref;
-          mainDiv.append(div);
-        }
-      }
-    }
-
-    document.getElementById("scorm-file").onchange = function() {
-      var div = document.createElement("div");
-      div.innerHTML = "SELECTED FILE: " + this.files[0].name;
-      mainDiv.append(div);
-      var zip = new JSZip();
-      zip.loadAsync(this.files[0])
-         .then(function(zip) {
-            return zip.file("imsmanifest.xml").async("string");
-         }, function() {alert("Not a valid zip file")})
-         .then(function (manifestString) {
-           searchXML(manifestString);
-         });;
-    }
-  </script>
 </body>
 </html>

@@ -1,0 +1,17 @@
+.form {
+	margin-top: 15px;
+}
+.form .btn-primary {
+	margin-left: 10px;
+}
+.form div {
+	display: inline-block;
+}
+form {
+	margin: 0;
+}
+.error-message {
+	color: #dc3545;
+	margin: 5px 0px 10px 0px;
+	font-weight: bold;
+}
